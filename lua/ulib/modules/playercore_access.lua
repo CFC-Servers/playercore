@@ -1,7 +1,3 @@
-
-
-print("protection up")
-
 if SERVER then
     if ULib ~= nil then
         ULib.ucl.registerAccess("target_himself",	{"user"},		"", "PlayerCore")
