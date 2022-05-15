@@ -30,7 +30,7 @@ net.Receive("wire_expression2_playercore_sendmessage", function( len, ply )
         WireLib.AddNotify(msg1, NOTIFY_GENERIC, 7, NOTIFYSOUND_DRIP3)
         WireLib.AddNotify(msg2, NOTIFY_GENERIC, 7)
         chat.AddText(Color(255, 50, 50),"After this message, ", ply, " can send you a 100% realistically fake people talking, including admins.")
-        chat.AddText(Color(255, 50, 50),"Look the console to see if the message is form an expression2")
+        chat.AddText(Color(255, 50, 50),"Look the console to see if the message is from an expression2")
     end
 
     LocalPlayer():PrintMessage(HUD_PRINTCONSOLE, "[E2] " .. ply:Name() .. ": ")
