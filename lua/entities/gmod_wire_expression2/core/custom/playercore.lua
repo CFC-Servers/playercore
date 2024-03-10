@@ -29,6 +29,9 @@ local function hasAccess(ply, target, command)
         if CPPI then
             for k, v in pairs(target:CPPIGetFriends())  do
                 if v == ply then
+		    local canRun = hook.Run( "PlayerCore_CanRunFunction", ply, target, command )
+		    if canRun == false then return false end
+
                     return true
                 end
             end
