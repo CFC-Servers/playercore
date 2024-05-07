@@ -427,24 +427,11 @@ e2function void sendMessageColor(array arr)
     printColorArray(self.player, player.GetAll(), arr)
 end
 
-e2function void sendMessageColor(...)
-	if not hasAccess(self.player, nil, "globalmessagecolor") then return nil end
-
-	printColorVarArg(self.player, player.GetAll(), typeids, ...)
-end
-
 e2function void entity:sendMessageColor(array arr)
 	if not ValidPly(this) then return end
 	if not hasAccess(self.player, this, "messagecolor") then return nil end
 
 	printColorArray(self.player, this, arr)
-end
-
-e2function void entity:sendMessageColor(...)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player, this, "messagecolor") then return nil end
-
-	printColorVarArg(self.player, this, typeids, ...)
 end
 
 e2function void array:sendMessageColor(array arr) 
@@ -461,22 +448,6 @@ e2function void array:sendMessageColor(array arr)
 	end
 
 	printColorArray(self.player, plys, arr)
-end
-
-e2function void array:sendMessageColor(...)
-    if not hasAccess(self.player, nil, "messagecolor") then return end
-
-	local plys = {}
-
-	for _, ply in pairs(this) do
-		if ValidPly(ply) then
-            if hasAccess(self.player, ply, "messagecolor") ~= false then
-                table.insert(plys, ply)
-            end
-        end
-	end
-
-	printColorVarArg(self.player, plys, typeids, ...)
 end
 
 
