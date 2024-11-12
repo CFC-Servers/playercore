@@ -1,4 +1,3 @@
-
 E2Lib.RegisterExtension("playercore", true)
 
 local sbox_E2_PlyCore = CreateConVar("sbox_E2_PlyCore", "2", FCVAR_ARCHIVE)
@@ -14,7 +13,7 @@ end
 local function targetIsBuddied( ply, target )
     if not CPPI then return true end
 
-    for k, v in pairs(target:CPPIGetFriends())  do
+    for _, v in pairs(target:CPPIGetFriends())  do
         if v == ply then
             return true
         end
@@ -359,32 +358,6 @@ local printColor_typeids = {
     e = function(e) return IsValid(e) and e:IsPlayer() and e or "" end,
 }
 
-local function printColorVarArg(ply, target, typeids, ...)
-    local send_array = { ... }
-
-    for i,tp in ipairs(typeids) do
-        if printColor_typeids[tp] then
-            send_array[i] = printColor_typeids[tp](send_array[i])
-        else
-            send_array[i] = ""
-        end
-    end
-
-    target = isentity(target) and {target} or target
-    target = target or player.GetAll()
-
-    local plys = {}
-    for _, ply in pairs(target) do
-        if ValidPly(ply) then
-            table.insert(plys, ply)
-        end
-    end
-
-    net.Start("wire_expression2_playercore_sendmessage")
-    net.WriteEntity(ply)
-    net.WriteTable(send_array)
-    net.Send(plys)
-end
 
 local printColor_types = {
     number = tostring,
@@ -429,12 +402,14 @@ local function printColorArray(ply, target, arr)
 end
 
 e2function void sendMessageColor(array arr)
+    if not self.player:IsAdmin() then return end
     if not hasAccess(self.player, nil, "globalmessagecolor") then return nil end
 
     printColorArray(self.player, player.GetAll(), arr)
 end
 
 e2function void entity:sendMessageColor(array arr)
+    if not self.player:IsAdmin() then return end
 	if not ValidPly(this) then return end
 	if not hasAccess(self.player, this, "messagecolor") then return nil end
 
@@ -442,6 +417,7 @@ e2function void entity:sendMessageColor(array arr)
 end
 
 e2function void array:sendMessageColor(array arr) 
+    if not self.player:IsAdmin() then return end
     if not hasAccess(self.player, nil, "messagecolor") then return end
 
 	local plys = {}
