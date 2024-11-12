@@ -11,9 +11,20 @@ local function ValidPly(ply)
     return true
 end
 
+local function targetIsBuddied( ply, target )
+    if not CPPI then return true end
+
+    for k, v in pairs(target:CPPIGetFriends())  do
+        if v == ply then
+            return true
+        end
+    end
+
+    return false
+end
+
 local function hasAccess(ply, target, command)
     local valid = hook.Run("PlyCoreCommand", ply, target, command)
-
     if valid ~= nil then
         return valid
     end
@@ -22,22 +33,18 @@ local function hasAccess(ply, target, command)
         return true
     elseif sbox_E2_PlyCore:GetInt() == 2 then
         if not target then return true end
-        if target:IsBot() then return true end
-        if ply == target then return true end
         if ply:IsAdmin() then return true end
 
-        if CPPI then
-            for k, v in pairs(target:CPPIGetFriends())  do
-                if v == ply then
-		    local canRun = hook.Run( "PlayerCore_CanRunFunction", ply, target, command )
-		    if canRun == false then return false end
+        local isSelfTarget = ply == target
+        local isBuddied = (not isSelfTarget) and targetIsBuddied( ply, target )
+        local isAcceptableTarget = isSelfTarget or isBuddied
 
-                    return true
-                end
-            end
-        end
+        if not isAcceptableTarget then return false end
 
-        return false
+        local canRun = hook.Run( "PlayerCore_CanRunFunction", ply, target, command )
+        if canRun == false then return false end
+
+        return true
     elseif sbox_E2_PlyCore:GetInt() == 3 then
         if not ply:IsAdmin() then return false end
 
